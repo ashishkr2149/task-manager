@@ -1,4 +1,8 @@
 import express from "express";
+import dotenv from "dotenv";
+
+//Configure Env
+dotenv.config();
 
 // REST Object
 const app = express();
@@ -11,7 +15,7 @@ app.get("/", (req, res) => {
 });
 
 //PORT
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
 //Run Listener
 app.listen(PORT, () => {
