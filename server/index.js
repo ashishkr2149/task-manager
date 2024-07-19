@@ -1,8 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
+import connectDB from "./db.js";
 
 //Configure Env
 dotenv.config();
+
+// Configure DB
+connectDB();
 
 // REST Object
 const app = express();

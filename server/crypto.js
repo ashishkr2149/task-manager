@@ -13,7 +13,7 @@ const encrypt = (text) => {
   return iv.toString("hex") + ":" + encrypted.toString("hex");
 };
 
-const decrypt = (hash) => {
+export const decrypt = (hash) => {
   const parts = hash.split(":");
   const iv = Buffer.from(parts.shift(), "hex");
   const encryptedText = Buffer.from(parts.join(":"), "hex");
@@ -27,11 +27,11 @@ const decrypt = (hash) => {
   return decrypted.toString();
 };
 
-// Example usage
-const url = "url";
+// // Example usage
+// const url = "url";
 
-const encryptedUrl = encrypt(url);
-console.log("Encrypted URL:", encryptedUrl);
+// const encryptedUrl = encrypt(url);
+// console.log("Encrypted URL:", encryptedUrl);
 
-const decryptedUrl = decrypt(encryptedUrl);
-console.log("Decrypted URL:", decryptedUrl);
+// const decryptedUrl = decrypt(encryptedUrl);
+// console.log("Decrypted URL:", decryptedUrl);
