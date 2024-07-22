@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Layout from "../components/Layout/Layout";
@@ -9,13 +9,19 @@ import { TaskState } from "../TaskContext.js";
 
 export const Signup = () => {
   const navigate = useNavigate();
-  const { addToast } = TaskState();
+  const { addToast, auth } = TaskState();
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
+
+  useEffect(() => {
+    if (auth?.user) {
+      navigate("/");
+    }
+  });
 
   const submitHandler = async (data) => {
     const signUpUrl = `${process.env.REACT_APP_API_URL}${process.env.REACT_APP_AUTHENTICATION_PREFIX}`;

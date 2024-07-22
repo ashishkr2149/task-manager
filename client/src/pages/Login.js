@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import Layout from "../components/Layout/Layout";
@@ -17,6 +17,12 @@ export const Login = () => {
     reset,
   } = useForm();
 
+  useEffect(() => {
+    if (auth?.user) {
+      navigate("/");
+    }
+  });
+
   const submitHandler = async (data) => {
     try {
       const loginUrl = `${process.env.REACT_APP_API_URL}${process.env.REACT_APP_AUTHENTICATION_PREFIX}`;
@@ -31,7 +37,7 @@ export const Login = () => {
           token: response.data.token,
         });
         addToast(response.data.message, "success");
-        localStorage.setItem("auth", JSON.stringify(response.data))
+        localStorage.setItem("auth", JSON.stringify(response.data));
         navigate("/");
       } else {
         addToast("Something went wrong", "error");
