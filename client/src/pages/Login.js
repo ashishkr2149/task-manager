@@ -4,8 +4,12 @@ import axios from "axios";
 import Layout from "../components/Layout/Layout";
 import Textbox from "../components/Textbox";
 import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
+import { TaskState } from "../TaskContext.js";
 
 export const Login = () => {
+  const navigate = useNavigate();
+  const { addToast } = TaskState();
   const {
     register,
     handleSubmit,
@@ -14,15 +18,25 @@ export const Login = () => {
   } = useForm();
 
   const submitHandler = async (data) => {
-    const loginUrl = `${process.env.REACT_APP_API_URL}${process.env.REACT_APP_AUTHENTICATION_PREFIX}`;
-    console.log(data);
-    console.log(loginUrl);
-    const response = await axios.post(`${loginUrl}/login`, {
-      email: data.email,
-      password: data.password,
-    });
+    try {
+      const loginUrl = `${process.env.REACT_APP_API_URL}${process.env.REACT_APP_AUTHENTICATION_PREFIX}`;
+      console.log(data);
+      console.log(loginUrl);
+      const response = await axios.post(`${loginUrl}/login`, {
+        email: data.email,
+        password: data.password,
+      });
+      if (response && response.data) {
+        addToast(response.data.message, "success");
+        navigate("/");
+      } else {
+        addToast("Something went wrong", "error");
+      }
+    } catch (error) {
+      console.log(error);
+      addToast(error.response.data.message, "error");
+    }
     reset();
-    console.log(response);
   };
 
   return (
@@ -77,7 +91,10 @@ export const Login = () => {
                   Don't have an account? {"\u00A0"}
                 </span>
 
-                <span className="text-sm text-gray-500 hover:text-[#77A6F7] hover:underline cursor-pointer">
+                <span
+                  className="text-sm text-gray-500 hover:text-[#77A6F7] hover:underline cursor-pointer"
+                  onClick={() => navigate("/signup")}
+                >
                   Sign up
                 </span>
                 <Button

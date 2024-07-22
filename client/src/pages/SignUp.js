@@ -4,8 +4,12 @@ import axios from "axios";
 import Layout from "../components/Layout/Layout";
 import Textbox from "../components/Textbox";
 import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
+import { TaskState } from "../TaskContext.js";
 
 export const Signup = () => {
+  const navigate = useNavigate();
+  const { addToast } = TaskState();
   const {
     register,
     handleSubmit,
@@ -15,16 +19,21 @@ export const Signup = () => {
 
   const submitHandler = async (data) => {
     const signUpUrl = `${process.env.REACT_APP_API_URL}${process.env.REACT_APP_AUTHENTICATION_PREFIX}`;
-    console.log(data);
-    console.log(signUpUrl);
-    const response = await axios.post(`${signUpUrl}/register`, {
-      first_name: data.firstName,
-      last_name: data.lastName,
-      email: data.email,
-      password: data.password,
-    });
+
+    try {
+      const response = await axios.post(`${signUpUrl}/register`, {
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        password: data.password,
+      });
+      addToast(response.data.message, "success");
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      addToast(error.response.data.message, "error");
+    }
     reset();
-    console.log(response);
   };
 
   return (
@@ -93,7 +102,7 @@ export const Signup = () => {
 
               <Button
                 type="submit"
-                label="Submit"
+                label="Signup"
                 className="w-full h-10 border border-[#77A6F7] text-[#77A6F7] hover:bg-[#77A6F7] hover:text-white rounded-full"
               />
               <div>
@@ -101,7 +110,10 @@ export const Signup = () => {
                   Already have an account? {"\u00A0"}
                 </span>
 
-                <span className="text-sm text-gray-500 hover:text-[#77A6F7] hover:underline cursor-pointer">
+                <span
+                  className="text-sm text-gray-500 hover:text-[#77A6F7] hover:underline cursor-pointer"
+                  onClick={() => navigate("/login")}
+                >
                   Login
                 </span>
                 <Button
