@@ -4,6 +4,7 @@ import connectDB from "./db.js";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
+import cors from "cors";
 
 import authRoutes from "./routes/authRoute.js";
 
