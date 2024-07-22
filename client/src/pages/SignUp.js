@@ -76,7 +76,7 @@ export const Signup = () => {
                 error={errors.email ? errors.email.message : ""}
               />
               <Textbox
-                placeholder="your password"
+                placeholder="Your password"
                 type="password"
                 name="password"
                 label="Password"
@@ -98,15 +98,15 @@ export const Signup = () => {
               />
               <div>
                 <span className="text-sm text-gray-500">
-                  Don't have an account? {"\u00A0"}
+                  Already have an account? {"\u00A0"}
                 </span>
 
                 <span className="text-sm text-gray-500 hover:text-[#77A6F7] hover:underline cursor-pointer">
-                  Sign up
+                  Login
                 </span>
                 <Button
                   type="button"
-                  label="Submit"
+                  label="Signup with Google"
                   className="w-full h-10 bg-[#77A6F7] text-[#FFFFFF] hover:bg-[#FFFFFF] hover:text-[#77A6F7] hover:border hover:border-[#77A6F7] rounded-full"
                 />
               </div>

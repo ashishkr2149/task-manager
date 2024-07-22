@@ -38,7 +38,7 @@ const Header = () => {
           <div className="block py-2 px-2 md:px-4 md:py-1 text-[#ffffff] hover:bg-[#ffffff] hover:text-[#77A6F7] hover:grow-1 rounded md:text-center md:w-[88px]">
             Login
           </div>
-          <div className="block py-2 px-2 md:px-4 md:py-1 text-[#ffffff] md:text-[#77A6F7] md:bg-[#ffffff] hover:bg-blue-700 rounded md:w-[88px]">
+          <div className="block py-2 px-2 md:px-4 md:py-1 text-[#ffffff] md:text-[#77A6F7] md:bg-[#ffffff] hover:bg-[#ffffff] hover:text-[#77A6F7] hover:md:none rounded md:w-[88px]">
             Signup
           </div>
         </div>
