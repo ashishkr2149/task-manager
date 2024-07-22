@@ -2,11 +2,13 @@ import { hashPassword, comparePassword } from "../helpers/authHelper.js";
 import userModel from "../models/UserModel.js";
 import JWT from "jsonwebtoken";
 
+//Validating email format
 const validateEmail = (email) => {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return re.test(String(email).toLowerCase());
 };
 
+//Register Controller
 export const registerController = async (req, res) => {
   try {
     const { first_name, last_name, email, password } = req.body;
@@ -73,6 +75,7 @@ export const registerController = async (req, res) => {
   }
 };
 
+//Login Controller
 export const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;

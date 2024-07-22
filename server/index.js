@@ -7,6 +7,7 @@ import helmet from "helmet";
 import cors from "cors";
 
 import authRoutes from "./routes/authRoute.js";
+import taskRoutes from "./routes/taskRoute.js";
 
 //Configure Env
 dotenv.config();
@@ -36,6 +37,7 @@ app.use(cors());
 
 //Routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/", taskRoutes)
 
 //REST API
 app.get("/", (req, res) => {

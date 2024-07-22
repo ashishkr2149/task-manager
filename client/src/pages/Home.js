@@ -7,8 +7,9 @@ const Home = () => {
 
   return (
     <Layout>
-      <h1>Home</h1>
-      <pre>{JSON.stringify(auth, null, 4)}</pre>
+      <div className="w-full flex-1 flex flex-col items-center justify-center">
+        <div>Home</div>
+      </div>
     </Layout>
   );
 };
