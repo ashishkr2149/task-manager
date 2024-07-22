@@ -1,23 +1,17 @@
 import Task from "../models/TaskModel.js";
 import Identifier from "../models/identifierModel.js";
 
+// Get all tasks with sorting
 export const getAllTasksController = async (req, res) => {
-  const { sortBy } = req.query;
-  const sortOptions = {};
-
-  if (sortBy) {
-    const [key, order] = sortBy.split(":");
-    sortOptions[key] = order === "desc" ? -1 : 1;
-  }
-
   try {
-    const tasks = await Task.find().sort(sortOptions);
+    const tasks = await Task.find();
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
+// Get a specific task by uId
 export const getTaskController = async (req, res) => {
   const { uId } = req.params;
 
@@ -32,9 +26,18 @@ export const getTaskController = async (req, res) => {
   }
 };
 
+// Add a new task
 export const addTaskController = async (req, res) => {
   const { title, description, column, dueDate, reminder } = req.body;
 
+  // Validation for required fields
+  if (!title || !description || !column) {
+    return res
+      .status(400)
+      .json({ error: "Title, description, and column are required" });
+  }
+
+  // Validation for column value
   if (!["To Do", "In Progress", "Done"].includes(column)) {
     return res.status(400).json({ error: "Invalid column" });
   }
@@ -70,11 +73,13 @@ export const addTaskController = async (req, res) => {
   }
 };
 
+// Update an existing task by uId
 export const updateTaskController = async (req, res) => {
   const { uId } = req.params;
   const { title, description, column, dueDate, reminder } = req.body;
 
-  if (!["To Do", "In Progress", "Done"].includes(column)) {
+  // Validation for column value
+  if (column && !["To Do", "In Progress", "Done"].includes(column)) {
     return res.status(400).json({ error: "Invalid column" });
   }
 
@@ -94,11 +99,12 @@ export const updateTaskController = async (req, res) => {
   }
 };
 
+// Delete a task by uId
 export const deleteTaskController = async (req, res) => {
-  const { uniqueIdentifier } = req.params;
+  const { uId } = req.params;
 
   try {
-    const deletedTask = await Task.findOneAndDelete({ uniqueIdentifier });
+    const deletedTask = await Task.findOneAndDelete({ uId });
     if (!deletedTask) {
       return res.status(404).json({ error: "Task not found" });
     }
@@ -108,16 +114,18 @@ export const deleteTaskController = async (req, res) => {
   }
 };
 
+// Move a task to a different column by uId
 export const moveTaskController = async (req, res) => {
   const { uId } = req.params;
   const { targetColumn } = req.body;
 
+  // Validation for targetColumn value
   if (!["To Do", "In Progress", "Done"].includes(targetColumn)) {
     return res.status(400).json({ error: "Invalid column" });
   }
 
   try {
-    const task = await Task.findById(uId);
+    const task = await Task.findOne({ uId });
     if (!task) {
       return res.status(404).json({ error: "Task not found" });
     }

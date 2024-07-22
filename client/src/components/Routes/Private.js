@@ -6,7 +6,7 @@ import Spinner from "../Spinner.js";
 
 export default function PrivateRoute() {
   const [ok, setOk] = useState(false);
-  const { auth, setAuth } = TaskState();
+  const { auth } = TaskState();
 
   useEffect(() => {
     const authCheck = async () => {

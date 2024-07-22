@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TaskState } from "../../TaskContext";
-
+import AvatarDropdown from "../Avatar";
 const Header = () => {
   const navigate = useNavigate();
 
@@ -19,7 +19,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-[#77A6F7] text-[#ffffff] flex flex-wrap items-center justify-between px-4 py-2 md:px-6 md:py-3">
+    <header className="bg-[#77A6F7] text-[#ffffff] flex flex-wrap items-center justify-between px-4 py-2 md:px-6 md:py-3 gap-2">
       <div className="flex items-center">
         <span
           className="text-xl font-bold px-2 cursor-pointer"
@@ -55,13 +55,8 @@ const Header = () => {
         } w-full md:flex md:w-auto md:items-center`}
       >
         {auth.user ? (
-          <div
-            className="block py-2 px-2 md:px-4 md:py-1 text-[#ffffff]
-      md:text-[#77A6F7] md:bg-[#ffffff] hover:bg-[#ffffff]
-      hover:text-[#77A6F7] hover:md:none rounded md:w-[88px] cursor-pointer"
-            onClick={handleLogout}
-          >
-            Logout
+          <div className="flex flex-col md:flex-row md:space-x-6 md:mt-0">
+            <AvatarDropdown handleLogout={handleLogout} />
           </div>
         ) : (
           <div className="flex flex-col md:flex-row md:space-x-6 md:mt-0">

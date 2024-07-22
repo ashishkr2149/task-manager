@@ -93,7 +93,7 @@ export const Login = () => {
 
               <Button
                 type="submit"
-                label="Submit"
+                label="Login"
                 className="w-full h-10 border border-[#77A6F7] text-[#77A6F7] hover:bg-[#77A6F7] hover:text-white rounded-full"
               />
               <div>

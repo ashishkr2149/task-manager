@@ -1,7 +1,7 @@
 // TaskProvider.js
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Toast from "./components/Toaster.js";
-import axios from 'axios'
+import axios from "axios";
 
 const TaskContext = createContext();
 
@@ -23,8 +23,8 @@ export const TaskProvider = ({ children }) => {
     setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
   };
 
-//Default axios header
-axios.defaults.headers.common['Authorization'] = auth?.token;
+  //Default axios header
+  axios.defaults.headers.common["Authorization"] = auth?.token;
 
   useEffect(() => {
     const data = localStorage.getItem("auth");
@@ -36,6 +36,7 @@ axios.defaults.headers.common['Authorization'] = auth?.token;
         token: parsedData.token,
       });
     }
+    // eslint-disable-next-line
   }, []);
 
   return (
