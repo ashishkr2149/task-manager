@@ -9,7 +9,7 @@ import { TaskState } from "../TaskContext.js";
 
 export const Login = () => {
   const navigate = useNavigate();
-  const { addToast } = TaskState();
+  const { addToast, auth, setAuth } = TaskState();
   const {
     register,
     handleSubmit,
@@ -27,7 +27,13 @@ export const Login = () => {
         password: data.password,
       });
       if (response && response.data) {
+        setAuth({
+          ...auth,
+          user: response.data.user,
+          token: response.data.token,
+        });
         addToast(response.data.message, "success");
+        localStorage.setItem("auth", JSON.stringify(response.data))
         navigate("/");
       } else {
         addToast("Something went wrong", "error");
