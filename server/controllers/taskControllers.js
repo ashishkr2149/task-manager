@@ -131,6 +131,7 @@ export const moveTaskController = async (req, res) => {
     }
 
     task.column = targetColumn;
+    task.updatedAt = Date.now();
     await task.save();
 
     res.status(200).json(task);
