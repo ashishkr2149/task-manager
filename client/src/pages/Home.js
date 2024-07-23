@@ -7,7 +7,7 @@ import { TaskState } from "../TaskContext";
 import DeleteModal from "../components/DeleteModal";
 
 const Home = () => {
-  const { openModal, addToast } = TaskState();
+  const { auth, openModal, addToast } = TaskState();
   const [tasks, setTasks] = useState([]);
   const [sortBy, setSortBy] = useState("relevance"); // Default sorting
   const [search, setSearch] = useState("");

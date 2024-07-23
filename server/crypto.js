@@ -35,3 +35,6 @@ export const decrypt = (hash) => {
 
 // const decryptedUrl = decrypt(encryptedUrl);
 // console.log("Decrypted URL:", decryptedUrl);
+
+//To generate SESSION_SECRET
+// console.log(randomBytes(64).toString('hex'));

@@ -6,8 +6,10 @@ import Textbox from "../components/Textbox";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { TaskState } from "../TaskContext.js";
+import { GoogleLogin } from "react-google-login";
 
 export const Login = () => {
+  console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID);
   const navigate = useNavigate();
   const { addToast, auth, setAuth } = TaskState();
   const {
@@ -47,6 +49,25 @@ export const Login = () => {
       addToast(error.response.data.message, "error");
     }
     reset();
+  };
+
+  const googleSuccess = async (response) => {
+    const result = response?.profileObj;
+    const token = response?.tokenId;
+
+    try {
+      setAuth({ ...auth, user: result, token });
+      localStorage.setItem("auth", JSON.stringify({ user: result, token }));
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      addToast("Google Sign In was unsuccessful. Try again later", "error");
+    }
+  };
+
+  const googleFailure = (error) => {
+    console.log(error);
+    addToast("Google Sign In was unsuccessful. Try again later", "error");
   };
 
   return (
@@ -107,10 +128,19 @@ export const Login = () => {
                 >
                   Sign up
                 </span>
-                <Button
-                  type="button"
-                  label="Login with Google"
-                  className="w-full h-10 bg-[#77A6F7] text-[#FFFFFF] hover:bg-[#FFFFFF] hover:text-[#77A6F7] hover:border hover:border-[#77A6F7] rounded-full"
+                <GoogleLogin
+                  clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                  render={(renderProps) => (
+                    <Button
+                      onClick={renderProps.onClick}
+                      disabled={renderProps.disabled}
+                      className="w-full h-10 bg-[#77A6F7] text-[#FFFFFF] hover:bg-[#FFFFFF] hover:text-[#77A6F7] hover:border hover:border-[#77A6F7] rounded-full"
+                      text="Login with Google"
+                    />
+                  )}
+                  onSuccess={googleSuccess}
+                  onFailure={googleFailure}
+                  cookiePolicy={"single_host_origin"}
                 />
               </div>
             </div>

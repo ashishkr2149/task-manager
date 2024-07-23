@@ -9,7 +9,7 @@ import { TaskState } from "../TaskContext.js";
 
 export const Signup = () => {
   const navigate = useNavigate();
-  const { addToast, auth } = TaskState();
+  const { addToast, auth, setAuth } = TaskState();
   const {
     register,
     handleSubmit,
@@ -40,6 +40,25 @@ export const Signup = () => {
       addToast(error.response.data.message, "error");
     }
     reset();
+  };
+
+  const googleSuccess = async (response) => {
+    const result = response?.profileObj;
+    const token = response?.tokenId;
+
+    try {
+      setAuth({ ...auth, user: result, token });
+      localStorage.setItem("auth", JSON.stringify({ user: result, token }));
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      addToast("Google Sign In was unsuccessful. Try again later", "error");
+    }
+  };
+
+  const googleFailure = (error) => {
+    console.log(error);
+    addToast("Google Sign In was unsuccessful. Try again later", "error");
   };
 
   return (

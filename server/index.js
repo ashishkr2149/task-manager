@@ -5,6 +5,10 @@ import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import cors from "cors";
+import passport from "passport";
+import session from "express-session";
+import "./helpers/passpoertHelper.js";
+import { decrypt } from './crypto.js'
 
 import authRoutes from "./routes/authRoute.js";
 import taskRoutes from "./routes/taskRoute.js";
@@ -52,9 +56,36 @@ app.use(limiter);
 app.use(helmet());
 app.use(cors(corsOptions));
 
+// Session configuration
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 //Routes
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/", taskRoutes)
+app.use("/api/v1/", taskRoutes);
+
+// Google OAuth routes
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+  })
+);
 
 //REST API
 app.get("/", (req, res) => {
