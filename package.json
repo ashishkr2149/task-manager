@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "client": "npm start --prefix client",
+    "server": "npm start --prefix server",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install-client": "npm install --prefix client",
+    "install-server": "npm install--prefix server",
+    "install": "concurrently \"npm run install-client\" \"npm run install-server\""
   },
   "repository": {
     "type": "git",
@@ -16,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/ashishkr2149/task-manager/issues"
   },
-  "homepage": "https://github.com/ashishkr2149/task-manager#readme"
+  "homepage": "https://github.com/ashishkr2149/task-manager#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
 }
