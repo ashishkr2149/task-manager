@@ -28,12 +28,29 @@ const limiter = rateLimit({
   message: "Too many requests from this IP, please try again later",
 });
 
+const allowedOrigins = [process.env.BACKEND_URL, 'http://localhost:3000'];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (e.g., mobile apps, curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
 //Middlewares
 app.use(express.json());
 app.use(morgan(customFormat));
 app.use(limiter);
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
 
 //Routes
 app.use("/api/v1/auth", authRoutes);
