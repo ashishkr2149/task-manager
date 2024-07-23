@@ -28,7 +28,7 @@ const limiter = rateLimit({
   message: "Too many requests from this IP, please try again later",
 });
 
-const allowedOrigins = [process.env.BACKEND_URL, 'http://localhost:3000'];
+const allowedOrigins = [process.env.FRONTEND_URL, 'http://localhost:3000'];
 
 const corsOptions = {
   origin: function (origin, callback) {
