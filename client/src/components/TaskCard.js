@@ -1,6 +1,13 @@
 import React from "react";
+import Button from "./Button";
 
-const TaskCard = ({ task, handleDragStart }) => {
+const TaskCard = ({
+  task,
+  handleDragStart,
+  handleDelete,
+  handleEdit,
+  handleView,
+}) => {
   const formatDate = (isoString) => {
     return new Date(isoString).toLocaleString("en-US", {
       year: "numeric",
@@ -54,7 +61,7 @@ const TaskCard = ({ task, handleDragStart }) => {
       <div>
         <p className="text-2xl font-[500]">{task.title}</p>
       </div>
-      <div className="h-24">
+      <div className="h-12">
         <p className="h-full text-lg font-[300]">{task.description}</p>
       </div>
       <div>
@@ -64,6 +71,31 @@ const TaskCard = ({ task, handleDragStart }) => {
         <p className="text-gray-500">
           Created At: {formatDate(task.createdAt)}
         </p>
+      </div>
+      <div>
+        <p className="text-gray-500">
+          Last Modified: {formatDate(task.updatedAt)}
+        </p>
+      </div>
+      <div className="flex justify-end gap-2">
+        <Button
+          type="button"
+          label="Delete"
+          className=" h-8 text-[#FFFFFF] border border-[#C96567] bg-[#C96567] hover:bg-[#FFFFFF] hover:text-[#77A6F7] hover:border hover:border-[#77A6F7] rounded-xl flex justify-center items-center"
+          onClick={() => handleDelete(task.uId)}
+        />
+        <Button
+          type="button"
+          label="Edit"
+          className=" h-8 text-[#FFFFFF] border border-[#77A6F7] bg-[#77A6F7] hover:bg-[#FFFFFF] hover:text-[#77A6F7] hover:border hover:border-[#77A6F7] rounded-xl flex justify-center items-center"
+          onClick={() => handleEdit(task.uId)}
+        />
+        <Button
+          type="button"
+          label="View Details"
+          className=" h-8 text-[#FFFFFF] border border-[#4D6D9A] bg-[#4D6D9A] hover:bg-[#FFFFFF] hover:text-[#77A6F7] hover:border hover:border-[#77A6F7] rounded-xl flex justify-center items-center"
+          onClick={() => handleView(task.uId)}
+        />
       </div>
     </div>
   );

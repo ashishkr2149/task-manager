@@ -22,9 +22,6 @@ const taskSchema = new mongoose.Schema({
     type: Date,
     default: null
   },
-  reminder: {
-    type: Date,
-  },
   createdAt: {
     type: Date,
     default: Date.now,

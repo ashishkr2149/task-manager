@@ -3,11 +3,16 @@ import Layout from "../components/Layout/Layout";
 import Button from "../components/Button";
 import axios from "axios";
 import TaskCard from "../components/TaskCard";
+import { TaskState } from "../TaskContext";
+import DeleteModal from "../components/DeleteModal";
 
 const Home = () => {
+  const { openModal, addToast } = TaskState();
   const [tasks, setTasks] = useState([]);
   const [sortBy, setSortBy] = useState("relevance"); // Default sorting
   const [search, setSearch] = useState("");
+  const [taskIdType, setTaskIdType] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const taskUrl = `${process.env.REACT_APP_API_URL}${process.env.REACT_APP_TASKS_PREFIX}`;
   const columns = ["To Do", "In Progress", "Done"];
 
@@ -19,6 +24,30 @@ const Home = () => {
     fetchTasks();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (taskIdType && taskIdType.type !== "delete") {
+      const fetchTaskDetail = async () => {
+        try {
+          let result = null;
+          if (taskIdType.uId)
+            result = await axios.get(`${taskUrl}/task/${taskIdType.uId}`);
+          // Only open the modal after the task data is fetched
+          openModal(
+            taskIdType.type === "add"
+              ? "add"
+              : taskIdType.type === "edit"
+              ? "edit"
+              : "view",
+            result?.data || null
+          );
+        } catch (error) {
+          console.error("Error fetching task details:", error);
+        }
+      };
+      fetchTaskDetail();
+    }
+  }, [taskIdType]);
 
   // Function to search based on title and description
   const filteredTasks = tasks.filter(
@@ -58,6 +87,49 @@ const Home = () => {
     setTasks([...tasks]);
   };
 
+  const handleAdd = () => {
+    setTaskIdType({
+      ...taskIdType,
+      uId: null,
+      type: "add",
+    });
+  };
+
+  const handleDeleteTask = async () => {
+    try {
+      const result = await axios.delete(`${taskUrl}/task/${taskIdType.uId}`);
+      console.log(result.data);
+      addToast(result.data.message, "success");
+    } catch (err) {
+      console.log("Error while deleting", err);
+      addToast(err.data.error, "error");
+    }
+  };
+
+  const handleDelete = (uId) => {
+    setTaskIdType({
+      ...taskIdType,
+      uId,
+      type: "delete",
+    });
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleEdit = (uId) => {
+    setTaskIdType({
+      ...taskIdType,
+      uId,
+      type: "edit",
+    });
+  };
+
+  const handleView = (uId) => {
+    setTaskIdType({
+      ...taskIdType,
+      uId,
+      type: "view",
+    });
+  };
   return (
     <Layout>
       <div className="w-full flex-1 flex flex-col items-center justify-center bg-[#D3E3FC] p-4 ">
@@ -66,6 +138,7 @@ const Home = () => {
             type="button"
             label="Add Task"
             className="w-[150px] h-10 text-[#FFFFFF] bg-[#77A6F7] hover:bg-[#FFFFFF] hover:text-[#77A6F7] hover:border hover:border-[#77A6F7] rounded-xl"
+            onClick={handleAdd}
           />
           <div className="w-full flex flex-col md:h-16 bg-[#FFFFFF] justify-center md:flex-row md:justify-between rounded items-center px-4 py-2">
             <div className="flex w-full gap-6 items-center">
@@ -95,7 +168,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="h-full flex flex-col md:flex-row gap-4 md:justify-between">
+          <div className="h-full flex flex-col lg:flex-row gap-4 md:justify-between">
             {columns.map((column, index) => (
               <div
                 key={index}
@@ -117,6 +190,9 @@ const Home = () => {
                         task={task}
                         key={task.uId}
                         handleDragStart={handleDragStart}
+                        handleDelete={handleDelete}
+                        handleEdit={handleEdit}
+                        handleView={handleView}
                       />
                     ))}
                 </div>
@@ -125,6 +201,14 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onDelete={() => {
+          handleDeleteTask();
+          setIsDeleteModalOpen(false);
+        }}
+      />
     </Layout>
   );
 };
